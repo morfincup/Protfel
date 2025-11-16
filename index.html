@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asilbek Sattorqulov - Portfolio</title>
+
+  <!-- Iconlar uchun Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+
+  <!-- Shrift -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #f0f4f8;
+      --bg-secondary: #ffffff;
+      --text-primary: #1a202c;
+      --text-secondary: #4a5568;
+      --accent: #667eea;
+      --accent-secondary: #764ba2;
+      --shadow-light: rgba(255, 255, 255, 0.8);
+      --shadow-dark: rgba(0, 0, 0, 0.15);
+      --glass-bg: rgba(255, 255, 255, 0.1);
+      --glass-border: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #0b1120;
+      --bg-secondary: #111827;
+      --text-primary: #f9fafb;
+      --text-secondary: #9ca3af;
+      --shadow-light: rgba(255, 255, 255, 0.05);
+      --shadow-dark: rgba(15, 23, 42, 0.9);
+      --glass-bg: rgba(15, 23, 42, 0.85);
+      --glass-border: rgba(148, 163, 184, 0.25);
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background: radial-gradient(circle at top, #1f2937 0, var(--bg-primary) 45%);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      transition: background 0.5s ease, color 0.5s ease;
+      padding-bottom: 90px; /* bottom nav uchun joy */
+    }
+
+    /* Loader */
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, #4f46e5, #1d4ed8);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      transition: opacity 0.5s, visibility 0.5s;
+    }
+
+    #loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .loader-text {
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 2rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    .progress-bar {
+      width: 260px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #fff;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    @keyframes pulse {
+      0%,
+      100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 0.75rem 5%;
+      background: linear-gradient(
+        to bottom,
+        rgba(15, 23, 42, 0.9),
+        rgba(15, 23, 42, 0.4)
+      );
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--glass-border);
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .theme-toggle,
+    .burger-menu {
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      background: var(--bg-secondary);
+      border: none;
+      box-shadow: 8px 8px 16px var(--shadow-dark),
+        -8px -8px 16px var(--shadow-light);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s;
+    }
+
+    .theme-toggle i {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+    }
+
+    .theme-toggle:hover,
+    .burger-menu:hover {
+      transform: translateY(-3px);
+      box-shadow: 10px 10px 22px var(--shadow-dark),
+        -10px -10px 22px var(--shadow-light);
+    }
+
+    .theme-toggle:active,
+    .burger-menu:active {
+      transform: translateY(0);
+      box-shadow: inset 4px 4px 8px var(--shadow-dark),
+        inset -4px -4px 8px var(--shadow-light);
+    }
+
+    .burger-menu {
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .burger-menu span {
+      width: 22px;
+      height: 2px;
+      border-radius: 999px;
+      background: var(--text-primary);
+      transition: transform 0.25s, opacity 0.2s;
+    }
+
+    .burger-menu.active span:nth-child(1) {
+      transform: translateY(4px) rotate(45deg);
+    }
+
+    .burger-menu.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .burger-menu.active span:nth-child(3) {
+      transform: translateY(-4px) rotate(-45deg);
+    }
+
+    /* Mobile menu */
+    .mobile-menu {
+      position: fixed;
+      top: 64px;
+      left: 0;
+      right: 0;
+      transform: translateY(-120%);
+      opacity: 0;
+      padding: 1.5rem 5%;
+      background: var(--glass-bg);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--glass-border);
+      z-index: 900;
+      transition: transform 0.35s ease, opacity 0.35s ease;
+    }
+
+    .mobile-menu.active {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .mobile-menu a {
+      display: block;
+      margin-bottom: 0.75rem;
+      padding: 0.9rem 1.1rem;
+      border-radius: 18px;
+      text-align: center;
+      text-decoration: none;
+      font-weight: 500;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      box-shadow: 6px 6px 12px var(--shadow-dark),
+        -6px -6px 12px var(--shadow-light);
+    }
+
+    /* Bottom navigation */
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 10px;
+      width: min(480px, 94%);
+      background: linear-gradient(
+        to top,
+        rgba(15, 23, 42, 0.95),
+        rgba(15, 23, 42, 0.6)
+      );
+      backdrop-filter: blur(20px);
+      border-radius: 999px;
+      border: 1px solid var(--glass-border);
+      padding: 0.4rem;
+      display: flex;
+      justify-content: space-around;
+      z-index: 1000;
+    }
+
+    .bottom-nav button {
+      flex: 1;
+      margin: 0 0.15rem;
+      background: var(--bg-secondary);
+      border: none;
+      height: 56px;
+      border-radius: 999px;
+      box-shadow: 6px 6px 12px var(--shadow-dark),
+        -6px -6px 12px var(--shadow-light);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+
+    .bottom-nav button i {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+    }
+
+    .bottom-nav button span {
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .bottom-nav button:hover,
+    .bottom-nav button.active {
+      transform: translateY(-4px);
+      box-shadow: 9px 9px 18px var(--shadow-dark),
+        -9px -9px 18px var(--shadow-light);
+    }
+
+    .bottom-nav button.active i,
+    .bottom-nav button:hover i {
+      color: var(--accent);
+    }
+
+    main {
+      padding: 5rem 5% 0;
+    }
+
+    section {
+      min-height: 100vh;
+      padding: 4.5rem 0 3rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 2.5rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Hero */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 1.5rem;
+    }
+
+    .hero-avatar {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: radial-gradient(circle at top, var(--accent), var(--accent-secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      color: #fff;
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.7);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-12px);
+      }
+    }
+
+    .hero-title {
+      font-size: 2.1rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      max-width: 520px;
+      margin-inline: auto;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      justify-content: center;
+    }
+
+    .badge {
+      padding: 0.5rem 1.1rem;
+      border-radius: 999px;
+      background: var(--bg-secondary);
+      font-size: 0.85rem;
+      font-weight: 500;
+      box-shadow: 6px 6px 12px var(--shadow-dark),
+        -6px -6px 12px var(--shadow-light);
+    }
+
+    .experience-badge {
+      margin-top: 0.5rem;
+      display: inline-block;
+      padding: 0.7rem 1.6rem;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 14px 40px rgba(37, 99, 235, 0.5);
+    }
+
+    .btn-3d {
+      margin-top: 1.4rem;
+      padding: 0.9rem 2.3rem;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 16px 40px rgba(37, 99, 235, 0.5);
+      transition: all 0.25s;
+    }
+
+    .btn-3d:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 50px rgba(37, 99, 235, 0.6);
+    }
+
+    .btn-3d:active {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 28px rgba(37, 99, 235, 0.4);
+    }
+
+    /* About */
+    .about-bio {
+      background: var(--bg-secondary);
+      border-radius: 22px;
+      padding: 1.8rem;
+      line-height: 1.8;
+      box-shadow: 10px 10px 22px var(--shadow-dark),
+        -10px -10px 22px var(--shadow-light);
+      margin-bottom: 2.2rem;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .skill-card {
+      background: var(--bg-secondary);
+      border-radius: 22px;
+      padding: 1.6rem 1.4rem;
+      text-align: center;
+      box-shadow: 10px 10px 22px var(--shadow-dark),
+        -10px -10px 22px var(--shadow-light);
+      transition: all 0.25s;
+    }
+
+    .skill-card:hover {
+      transform: translateY(-8px) rotateY(5deg);
+      box-shadow: 14px 14px 28px var(--shadow-dark),
+        -14px -14px 28px var(--shadow-light);
+    }
+
+    .skill-card i {
+      font-size: 2.4rem;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+    }
+
+    /* Services */
+    .services-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.8rem;
+    }
+
+    .service-card {
+      background: var(--bg-secondary);
+      border-radius: 24px;
+      padding: 1.9rem 1.7rem;
+      box-shadow: 10px 10px 22px var(--shadow-dark),
+        -10px -10px 22px var(--shadow-light);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .service-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(102, 126, 234, 0.12),
+        rgba(118, 75, 162, 0.1)
+      );
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .service-card:hover::before {
+      opacity: 1;
+    }
+
+    .service-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 16px 36px rgba(37, 99, 235, 0.5);
+      position: relative;
+      z-index: 1;
+    }
+
+    .service-card h3 {
+      position: relative;
+      z-index: 1;
+      font-size: 1.25rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .service-card p {
+      position: relative;
+      z-index: 1;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    /* Portfolio */
+    .portfolio-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.8rem;
+    }
+
+    .portfolio-item {
+      background: var(--bg-secondary);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 10px 10px 22px var(--shadow-dark),
+        -10px -10px 22px var(--shadow-light);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .portfolio-item:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 16px 16px 32px var(--shadow-dark),
+        -16px -16px 32px var(--shadow-light);
+    }
+
+    .portfolio-image {
+      height: 180px;
+      background: radial-gradient(circle at top, var(--accent), var(--accent-secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      color: #fff;
+    }
+
+    .portfolio-content {
+      padding: 1.2rem 1.4rem 1.4rem;
+    }
+
+    .portfolio-tag {
+      display: inline-block;
+      padding: 0.3rem 0.9rem;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      color: #fff;
+      font-size: 0.75rem;
+      margin-bottom: 0.7rem;
+    }
+
+    /* Contact & social */
+    .contact-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      gap: 2.5rem;
+    }
+
+    .contact-form {
+      background: var(--bg-secondary);
+      border-radius: 24px;
+      padding: 2rem 1.7rem;
+      box-shadow: 10px 10px 22px var(--shadow-dark),
+        -10px -10px 22px var(--shadow-light);
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.35rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      border: none;
+      border-radius: 18px;
+      padding: 0.9rem 1rem;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: inherit;
+      box-shadow: inset 4px 4px 8px var(--shadow-dark),
+        inset -4px -4px 8px var(--shadow-light);
+    }
+
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .social-panel {
+      background: var(--bg-secondary);
+      border-radius: 24px;
+      padding: 1.8rem 1.6rem 2rem;
+      box-shadow: 10px 10px 22px var(--shadow-dark),
+        -10px -10px 22px var(--shadow-light);
+    }
+
+    .social-panel h3 {
+      margin-bottom: 1.2rem;
+      font-size: 1.1rem;
+    }
+
+    .social-icons {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .social-btn {
+      width: 80px;
+      height: 80px;
+      margin-inline: auto;
+      border-radius: 24px;
+      border: none;
+      background: var(--bg-secondary);
+      box-shadow: 8px 8px 16px var(--shadow-dark),
+        -8px -8px 16px var(--shadow-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.25s;
+      color: var(--text-primary);
+      font-size: 1.9rem;
+    }
+
+    .social-btn:hover {
+      transform: translateY(-6px);
+      box-shadow: 12px 12px 24px var(--shadow-dark),
+        -12px -12px 24px var(--shadow-light);
+      color: var(--accent);
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .modal-backdrop.active {
+      display: flex;
+    }
+
+    .modal {
+      width: min(320px, 90%);
+      background: var(--bg-secondary);
+      border-radius: 22px;
+      padding: 1.8rem 1.5rem;
+      box-shadow: 16px 16px 36px var(--shadow-dark),
+        -16px -16px 36px var(--shadow-light);
+      text-align: center;
+    }
+
+    .modal-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 20px;
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      color: #fff;
+      font-size: 1.8rem;
+    }
+
+    .modal-username {
+      font-weight: 600;
+      margin-top: 0.6rem;
+      font-size: 1rem;
+    }
+
+    .modal-close {
+      margin-top: 1.4rem;
+      width: 100%;
+      padding: 0.7rem 1rem;
+      border-radius: 999px;
+      border: none;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 6px 6px 12px var(--shadow-dark),
+        -6px -6px 12px var(--shadow-light);
+    }
+
+    footer {
+      padding: 1rem 5% 5.5rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    @media (min-width: 900px) {
+      main {
+        padding-inline: 10%;
+      }
+      .contact-container {
+        grid-template-columns: 1.1fr 0.9fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loader -->
+  <div id="loader">
+    <div class="loader-text">AS</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="loaderFill"></div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">AS</div>
+    <div class="header-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Theme">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+      <button class="burger-menu" id="burgerBtn" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile menu -->
+  <nav class="mobile-menu" id="mobileMenu">
+    <a href="#bosh">Bosh sahifa</a>
+    <a href="#men">Men haqimda</a>
+    <a href="#xizmat">Xizmatlar</a>
+    <a href="#ish">Ishlar</a>
+    <a href="#aloqa">Aloqa</a>
+  </nav>
+
+  <main>
+    <!-- HERO -->
+    <section id="bosh" class="hero">
+      <div class="hero-avatar">AS</div>
+      <h1 class="hero-title">Premium Portfolio Website</h1>
+      <p class="hero-subtitle">
+        Web saytlar, Telegram botlar, professional video montaj va ilovalar –
+        5+ yillik tajribaga ega full-stack yechimlar.
+      </p>
+      <div class="hero-badges">
+        <div class="badge">Web dasturchi</div>
+        <div class="badge">Telegram bot developer</div>
+        <div class="badge">Video montaj</div>
+        <div class="badge">Ilova yaratish</div>
+      </div>
+      <span class="experience-badge">5+ yil tajriba</span>
+      <button class="btn-3d" onclick="document.querySelector('#aloqa').scrollIntoView({behavior:'smooth'})">
+        Aloqa uchun yozing
+      </button>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="men">
+      <h2 class="section-title">Men haqimda</h2>
+      <div class="about-bio">
+        Men web saytlar, Telegram botlar, dastur va professional videolar
+        yaratish bilan shug‘ullanaman. Maqsadim — biznesingiz yoki
+        shaxsiy brendingiz uchun texnik tomondan mukammal, zamonaviy va
+        ko‘rkam yechimlar ishlab chiqish.
+      </div>
+
+      <div class="skills-grid">
+        <div class="skill-card">
+          <i class="fa-solid fa-code"></i>
+          <h3>Front-end</h3>
+          <p>HTML, CSS, JavaScript, responsiv va animatsiyali UI.</p>
+        </div>
+        <div class="skill-card">
+          <i class="fa-solid fa-server"></i>
+          <h3>Back-end & Botlar</h3>
+          <p>API, ma’lumotlar bazasi, Telegram botlar va integratsiyalar.</p>
+        </div>
+        <div class="skill-card">
+          <i class="fa-solid fa-film"></i>
+          <h3>Video montaj</h3>
+          <p>Reklama roliklari, Reels/Shorts, intro/outro va brend videolar.</p>
+        </div>
+        <div class="skill-card">
+          <i class="fa-solid fa-mobile-screen-button"></i>
+          <h3>Ilovalar</h3>
+          <p>Mobil va web ilovalar uchun toza va tezkor interfeyslar.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="xizmat">
+      <h2 class="section-title">Xizmatlar</h2>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">
+            <i class="fa-solid fa-globe"></i>
+          </div>
+          <h3>Web sayt yaratish</h3>
+          <p>
+            Landing page, korporativ sayt, online do‘kon va shaxsiy brend
+            saytlari — zamonaviy dizayn va tezkor ishlash.
+          </p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">
+            <i class="fa-brands fa-telegram"></i>
+          </div>
+          <h3>Telegram botlar</h3>
+          <p>
+            Do‘kon bot, buyurtma bot, test/quiz bot, CRM tizimlar va avtomatik
+            javob beruvchi botlar.
+          </p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">
+            <i class="fa-solid fa-clapperboard"></i>
+          </div>
+          <h3>Professional video montaj</h3>
+          <p>
+            Reklama, SMM kontent, Reels/Shorts, animatsion intro va logotip
+            animatsiyasi.
+          </p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">
+            <i class="fa-solid fa-mobile"></i>
+          </div>
+          <h3>Ilova va web-app</h3>
+          <p>
+            Mobil ilova, PWA va web-applar; foydalanuvchi uchun qulay va
+            tezkor interfeyslar.
+          </p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">
+            <i class="fa-solid fa-screwdriver-wrench"></i>
+          </div>
+          <h3>Web bilan bog‘liq xizmatlar</h3>
+          <p>
+            Domen/hosting, SEO, UI/UX, texnik xizmat va saytni doimiy
+            yangilab borish.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PORTFOLIO -->
+    <section id="ish">
+      <h2 class="section-title">Ishlar</h2>
+      <div class="portfolio-grid">
+        <div class="portfolio-item">
+          <div class="portfolio-image">
+            <i class="fa-solid fa-store"></i>
+          </div>
+          <div class="portfolio-content">
+            <span class="portfolio-tag">Web & Bot</span>
+            <h3>Online do‘kon platformasi</h3>
+            <p>Kassaga ulangan web-sayt va Telegram do‘kon boti integratsiyasi.</p>
+          </div>
+        </div>
+        <div class="portfolio-item">
+          <div class="portfolio-image">
+            <i class="fa-solid fa-video"></i>
+          </div>
+          <div class="portfolio-content">
+            <span class="portfolio-tag">Video</span>
+            <h3>SMM promo roliklar</h3>
+            <p>Brendlar uchun vertikal video kontent (Reels / Shorts) to‘plami.</p>
+          </div>
+        </div>
+        <div class="portfolio-item">
+          <div class="portfolio-image">
+            <i class="fa-solid fa-mobile-retro"></i>
+          </div>
+          <div class="portfolio-content">
+            <span class="portfolio-tag">Ilova</span>
+            <h3>Mobil ilova interfeysi</h3>
+            <p>Qulay navigatsiya va zamonaviy UI bilan mobil dastur dizayni.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="aloqa">
+      <h2 class="section-title">Aloqa</h2>
+      <div class="contact-container">
+        <div class="contact-form">
+          <div class="form-group">
+            <label for="name">Ismingiz</label>
+            <input id="name" type="text" placeholder="Ismingizni kiriting" />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="email@example.com" />
+          </div>
+          <div class="form-group">
+            <label for="message">Xabar</label>
+            <textarea id="message" placeholder="Xabaringizni yozing"></textarea>
+          </div>
+          <button class="btn-3d" type="button">Xabar yuborish</button>
+        </div>
+
+        <div class="social-panel">
+          <h3>Ijtimoiy tarmoqlar</h3>
+          <div class="social-icons">
+            <button
+              class="social-btn"
+              data-platform="Telegram"
+              data-username="@s4_mn"
+            >
+              <i class="fa-brands fa-telegram"></i>
+            </button>
+            <button
+              class="social-btn"
+              data-platform="Instagram"
+              data-username="@asilbek_sattorkulovv"
+            >
+              <i class="fa-brands fa-instagram"></i>
+            </button>
+            <button
+              class="social-btn"
+              data-platform="Twitter"
+              data-username="@username"
+            >
+              <i class="fa-brands fa-x-twitter"></i>
+            </button>
+            <button
+              class="social-btn"
+              data-platform="Facebook"
+              data-username="@username"
+            >
+              <i class="fa-brands fa-facebook-f"></i>
+            </button>
+            <button
+              class="social-btn"
+              data-platform="LinkedIn"
+              data-username="@username"
+            >
+              <i class="fa-brands fa-linkedin-in"></i>
+            </button>
+            <button
+              class="social-btn"
+              data-platform="GitHub"
+              data-username="@username"
+            >
+              <i class="fa-brands fa-github"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal -->
+  <div class="modal-backdrop" id="socialModal">
+    <div class="modal">
+      <div class="modal-icon" id="modalIcon">
+        <i class="fa-brands fa-telegram"></i>
+      </div>
+      <div id="modalPlatform">Telegram</div>
+      <div class="modal-username" id="modalUsername">@username</div>
+      <button class="modal-close" id="modalClose">Yopish</button>
+    </div>
+  </div>
+
+  <footer>
+    © 2026. All rights reserved. 5+ yil tajriba asosida yaratilgan professional
+    yechimlar.
+  </footer>
+
+  <!-- Bottom navigation -->
+  <nav class="bottom-nav">
+    <button data-target="bosh" class="active">
+      <i class="fa-solid fa-house"></i>
+      <span>Bosh</span>
+    </button>
+    <button data-target="men">
+      <i class="fa-solid fa-user"></i>
+      <span>Men</span>
+    </button>
+    <button data-target="xizmat">
+      <i class="fa-solid fa-briefcase"></i>
+      <span>Xizmat</span>
+    </button>
+    <button data-target="ish">
+      <i class="fa-solid fa-image"></i>
+      <span>Ish</span>
+    </button>
+    <button data-target="aloqa">
+      <i class="fa-solid fa-envelope"></i>
+      <span>Aloqa</span>
+    </button>
+  </nav>
+
+  <script>
+    // Loader
+    const loader = document.getElementById("loader");
+    const loaderFill = document.getElementById("loaderFill");
+    let progress = 0;
+    const loaderTimer = setInterval(() => {
+      progress += 10;
+      if (progress > 100) progress = 100;
+      loaderFill.style.width = progress + "%";
+      if (progress === 100) {
+        clearInterval(loaderTimer);
+        setTimeout(() => loader.classList.add("hidden"), 400);
+      }
+    }, 120);
+
+    // Theme toggle
+    const themeToggle = document.getElementById("themeToggle");
+    const html = document.documentElement;
+
+    function updateThemeIcon() {
+      const icon = themeToggle.querySelector("i");
+      if (html.getAttribute("data-theme") === "dark") {
+        icon.className = "fa-solid fa-moon";
+      } else {
+        icon.className = "fa-solid fa-sun";
+      }
+    }
+    updateThemeIcon();
+
+    themeToggle.addEventListener("click", () => {
+      const current = html.getAttribute("data-theme") || "dark";
+      const next = current === "dark" ? "light" : "dark";
+      html.setAttribute("data-theme", next);
+      updateThemeIcon();
+    });
+
+    // Burger menu
+    const burgerBtn = document.getElementById("burgerBtn");
+    const mobileMenu = document.getElementById("mobileMenu");
+
+    burgerBtn.addEventListener("click", () => {
+      burgerBtn.classList.toggle("active");
+      mobileMenu.classList.toggle("active");
+    });
+
+    mobileMenu.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        const id = link.getAttribute("href").replace("#", "");
+        document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+        burgerBtn.classList.remove("active");
+        mobileMenu.classList.remove("active");
+      });
+    });
+
+    // Bottom nav scroll
+    const bottomButtons = document.querySelectorAll(".bottom-nav button");
+    bottomButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.target;
+        document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+      });
+    });
+
+    // Scroll active section
+    const sections = ["bosh", "men", "xizmat", "ish", "aloqa"];
+    window.addEventListener("scroll", () => {
+      const y = window.scrollY + window.innerHeight / 2;
+      let current = "bosh";
+      sections.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el && el.offsetTop <= y) current = id;
+      });
+      bottomButtons.forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.target === current);
+      });
+    });
+
+    // Social modal
+    const socialButtons = document.querySelectorAll(".social-btn");
+    const socialModal = document.getElementById("socialModal");
+    const modalPlatform = document.getElementById("modalPlatform");
+    const modalUsername = document.getElementById("modalUsername");
+    const modalIcon = document.getElementById("modalIcon");
+    const modalClose = document.getElementById("modalClose");
+
+    socialButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const platform = btn.dataset.platform;
+        const username = btn.dataset.username;
+        const iconClass = btn.querySelector("i").className;
+
+        modalPlatform.textContent = platform;
+        modalUsername.textContent = username;
+        modalIcon.innerHTML = `<i class="${iconClass}"></i>`;
+        socialModal.classList.add("active");
+      });
+    });
+
+    modalClose.addEventListener("click", () => {
+      socialModal.classList.remove("active");
+    });
+
+    socialModal.addEventListener("click", (e) => {
+      if (e.target === socialModal) socialModal.classList.remove("active");
+    });
+  </script>
+</body>
+</html>
